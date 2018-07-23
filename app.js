@@ -51,10 +51,6 @@ app.get("/",(request, response) => {
 
 
 app.get("/:id", function (request, response) {
-    console.log("COHORTS: ", cohorts);
-    
-    console.log("REQUEST PARAMS ID: ", request.params.id);
-    
     var record = findById(cohorts, request.params.id);
     if (!record){
         response.status = 404;
