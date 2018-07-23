@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 var cohorts = [{
-    id: 1,
+    id: 1, 
     cohortName: "17-01-WD-DP",
     cohortCode: "g100",
     numberOfStudents: 28
@@ -38,32 +38,24 @@ var cohorts = [{
 
 function findById(data, id){
     for (let i = 0; i < data.length; i++){
-        if (data[i].id === id){
+        let holder = data[i].id.toString();
+        if (holder === id){
             return data[i];
         }
     }
     return null;
 }
-app.get("/home",(request, response) => {
-    // console.log("REQUEST: " + request);
-    // console.log("RESPONSE: " + response);
-    
+app.get("/",(request, response) => {
     response.json(cohorts)
-    .then(data => {
-        console.log("DATA: " + data);
-        
-    })
 })
 
 
 app.get("/:id", function (request, response) {
-    // console.log("REQUEST: " + request.params);
+    console.log("COHORTS: ", cohorts);
+    
+    console.log("REQUEST PARAMS ID: ", request.params.id);
     
     var record = findById(cohorts, request.params.id);
-    // console.log("RECORD: " + record);
-    
-    // console.log("COHORTS: " + cohorts, "request.params.ID " + request.params.ID);
-    
     if (!record){
         response.status = 404;
         response.json({
@@ -71,25 +63,9 @@ app.get("/:id", function (request, response) {
                 message: "No record found!"
             }
         });
+    } else {
+        response.json({cohorts: record});
     }
-
-    //response.json({cohorts: record});
 });
-
-// catch 404 and forward to error handler
-// app.use((req, res, next) => {
-//     const err = new Error("Not Found");
-//     err.status = 404;
-//     next(err);
-// });
-
-// // error handler
-// app.use((err, req, res, next) => {
-//     res.status(err.status || 500);
-//     res.json({
-//     message: err.message,
-//     error: req.app.get("env") === "development" ? err.stack : {}
-//     });
-// });
 
 app.listen(9000);
