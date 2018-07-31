@@ -3,10 +3,7 @@ const app = express();
 const cors = require("cors");
 const morgan = require('morgan');
 const port = parseInt(process.env.PORT || 9000);
-// let csvToJson = require('convert-csv-to-json');
 const bodyParser = require('body-parser');
-// var cohorts = csvToJson.fieldDelimiter(',').getJsonFromCsv("cohorts.csv");
-
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -15,7 +12,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cors());
 
-var cohorts = [{
+var data = [{
     id: 1, 
     cohortName: "17-01-WD-DP",
     cohortCode: "g100",
@@ -47,21 +44,21 @@ function findById(data, id){
     return null;
 }
 app.get("/",(request, response) => {
-    response.json(cohorts)
+    response.json({data: data})
 })
 
 
 app.get("/:id", function (request, response) {
-    var record = findById(cohorts, request.params.id);
+    var record = findById(data, request.params.id);
     if (!record){
-        response.status = 404;
-        response.json({
-            error: {
-                message: "No record found!"
-            }
-        });
+        //response.status = 404;
+        response.status(404).send({
+                error: {
+                    message: "No record found!"
+                }
+            })
     } else {
-        response.json({cohorts: record});
+        response.json({data: record});
     }
 });
 
